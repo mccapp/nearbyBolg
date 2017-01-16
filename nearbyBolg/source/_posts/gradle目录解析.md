@@ -3,6 +3,7 @@ title: gradle目录解析
 date: 2016-11-10 13:40:09
 categories: gradle
 tags: [android,gradle]
+thumbnail: http://img5.imgtn.bdimg.com/it/u=1321604390,4156419709&fm=23&gp=0.jpg
 ---
 
 > Gradle目录解析
