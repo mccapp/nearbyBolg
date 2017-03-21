@@ -71,7 +71,7 @@ deploy:
   #我们是使用 git 来部署的。
   type: git
   # git 仓库的地址。
-  repo: git@github.com:mccapp/mccapp.github.io.git  
+  repo: https://github.com/mccapp/mccapp.github.io.git
   # 分支名称。
   branch: master
 # RSS
