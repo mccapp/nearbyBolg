@@ -1,6 +1,6 @@
 ---
 title: hexo部署问题
-date: 2017-03-21 14:48:20
+date: 2014-09-21 14:48:20
 categories: hexo
 tags: [hexo]
 ---

@@ -1,8 +1,8 @@
 ---
-title: git基础学习
+title: git基础学习二
 date: 2015-09-21 11:13:18
-categories: hexo
-tags: [hexo]
+categories: git
+tags: [git]
 ---
 
 > git常用命令
