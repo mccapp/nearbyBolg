@@ -1,6 +1,6 @@
 ---
 title: androidstudiosvn设置忽略
-date: 2015-09-21 12:13:18
+date: 2016-09-21 12:13:18
 categories: git
 tags: [git]
 ---

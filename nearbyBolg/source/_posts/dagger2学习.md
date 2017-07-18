@@ -1,6 +1,6 @@
 ---
 title: dagger2学习
-date: 2014-12-12 14:54:43
+date: 2016-10-28 14:54:43
 categories: dagger2
 tags: [android,dagger2]
 ---

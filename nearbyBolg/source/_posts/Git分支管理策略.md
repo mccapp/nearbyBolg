@@ -1,6 +1,6 @@
 ---
 title: Git分支管理策略
-date: 2017-04-18 11:55:47
+date: 2016-10-24 11:55:47
 categories: git
 tags: [git]
 ---
@@ -42,7 +42,7 @@ Git分支管理策略
 
 	1.git checkout develop  
 	2.git merge --no-ff release-1.2 -m"合并分支信息" 
-	3. git branch -d release-1.2
+	3.git branch -d release-1.2
 
 	3.Fixbug  bug分支：软件正式发布后，难免会出现bug，就需要创建一个分支，进行bug修补。
 	从Master分支上面分出来的。修补结束以后，在合并到Master和Develop分支。
