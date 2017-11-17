@@ -5,7 +5,7 @@ categories: android
 tags: [android]
 ---
 新的权限机制更好的保护了用户的隐私，Google将权限分为两类，一类是Normal Permissions，这类权限一般不涉及用户隐私，是不需要用户进行授权的，比如手机震动、访问网络等；另一类是Dangerous Permission，一般是涉及到用户隐私的，需要用户进行授权，比如读取sdcard、访问通讯录等。
-
+<!-- more --> 
 1.Normal Permissions如下
 
 ACCESS_LOCATION_EXTRA_COMMANDS

@@ -9,7 +9,7 @@ tags: [rxjava,rxandroid]
 
 直接创建一个Observable（创建操作） 组合多个Observable（组合操作） 对Observable发射的数据执行变换操作（变换操作） 从Observable发射的数据中取特定的值（过滤操作） 转发Observable的部分值（条件/布尔/过滤操作） 对Observable发射的数据序列求值（算术/聚合操作）
 创建操作
-
+<!-- more --> 
 用于创建Observable的操作符
 Create
 通过调用观察者的方法从头创建一个Observable
