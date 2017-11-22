@@ -8,6 +8,7 @@ tags: [android,bug]
 其他之下的手机会报java.lang.VerifyError.。之前以为环信客服SDK的兼容问题，后来把融云屏蔽掉，
 后面又接连报错，才意思到是我项目出问题，百度了一些资料，才发现java.lang.VerifyError有几种情况会报错;
 google的官方说法是：java.lang.VerifyError是adt与jdk的不同版本的不同，进入架包之类的会报错各种不同的错误，是无法机器无法解决的。
+<!-- more --> 
 解决方法一
 ![此处输入图片的描述][1]
 
