@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
  
 # Site
-title: Nearby | 26   #博客名
+title: Nearby.ren    #博客名
 subtitle:   #副标题
 description:  nearby , 移动开发, 用户体验, 设计, Java, JavaWeb #用于搜索，没有直观表现
 author: 阿荣   #作者
@@ -12,7 +12,7 @@ timezone:     #时区，此处不填写，hexo会以你目前电脑的时区为�
 
 # URL   暂不配置，使用默认值
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://www.nearby.ren
+url: http://b.nearby.ren
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
