@@ -2,7 +2,7 @@
 title: rxjava 操作符简略
 date: 2017-12-12 17:50:12
 categories: rxjava
-tags: [rxjava,rxandroid]
+tags: [rxjava,rxandroid,android]
 ---
 
 rxjava 
