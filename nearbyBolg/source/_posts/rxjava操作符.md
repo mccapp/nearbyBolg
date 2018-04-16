@@ -2,7 +2,7 @@
 title: rxjava操作符
 date: 2016-11-02 10:53:49
 categories: rxjava
-tags: [rxjava,rxandroid]
+tags: [rxjava,rxandroid,android]
 ---
 
 操作符决策树
