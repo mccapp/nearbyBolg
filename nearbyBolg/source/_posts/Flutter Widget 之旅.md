@@ -7,7 +7,6 @@ tags: [android,ios]
 
 flutter 程序入口 ：
 import 'package:flutter/material.dart';
-
 void main() {
   runApp(
     new Center(
