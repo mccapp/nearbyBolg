@@ -1,8 +1,8 @@
 ---
 title: Go sync包 WaitGroup使用
-date: 2018-3-05 16:30:12
-categories: apk
-tags: [android,ios]
+date: 2018-10-05 16:30:12
+categories: go
+tags: [go]
 ---
 
 sync.WaitGroup用途：
