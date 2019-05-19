@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>Android之Lru算法 | nearby.ren</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Lru：    LRU是Least Recently Used 的缩写，翻译过来就是“最近最少使用”，LRU缓存就是使用这种原理实现，简单的说就是缓存一定量的数据，当超过设定的阈值时就把一些过期的数据删除掉，比如我们缓存10000条数据，当数据小于10000时可以随意添加，当超过10000时就需要把新的数据添加进来，同时要把过期数据删除，以确保我们最大缓存10000条，那怎么确定删除哪条过期数据呢">
+<meta name="keywords" content="android,glide">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android之Lru算法">
+<meta property="og:url" content="http://b.nearby.ren/2016/06/18/Android之Lru算法/index.html">
+<meta property="og:site_name" content="nearby.ren">
+<meta property="og:description" content="Lru：    LRU是Least Recently Used 的缩写，翻译过来就是“最近最少使用”，LRU缓存就是使用这种原理实现，简单的说就是缓存一定量的数据，当超过设定的阈值时就把一些过期的数据删除掉，比如我们缓存10000条数据，当数据小于10000时可以随意添加，当超过10000时就需要把新的数据添加进来，同时要把过期数据删除，以确保我们最大缓存10000条，那怎么确定删除哪条过期数据呢">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-01-18T09:08:56.262Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android之Lru算法">
+<meta name="twitter:description" content="Lru：    LRU是Least Recently Used 的缩写，翻译过来就是“最近最少使用”，LRU缓存就是使用这种原理实现，简单的说就是缓存一定量的数据，当超过设定的阈值时就把一些过期的数据删除掉，比如我们缓存10000条数据，当数据小于10000时可以随意添加，当超过10000时就需要把新的数据添加进来，同时要把过期数据删除，以确保我们最大缓存10000条，那怎么确定删除哪条过期数据呢">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="nearby.ren" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/css/images/super.png# path to favicon">
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">nearby.ren</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">目录</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">目录</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">ARONG</h2>
+            <h3 id="title">Android server web</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>china, Hainan</span>
+            <a id="follow" target="_blank" href="https://github.com/mccapp">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                67
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                29
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://gitee.com/mccapp" target="_blank" title="github">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://twitter.com/" target="_blank" title="twitter">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://www.facebook.com/" target="_blank" title="facebook">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://dribbble.com/" target="_blank" title="dribbble">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/atom.xml" target="_blank" title="rss">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Android之Lru算法" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Android之Lru算法
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2016/06/18/Android之Lru算法/">
+            <time datetime="2016-06-18T12:45:21.000Z" itemprop="datePublished">2016-06-18</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/android/">android</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/android/">android</a>, <a class="tag-link" href="/tags/glide/">glide</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>Lru：</p>
+<p>   LRU是Least Recently Used 的缩写，翻译过来就是“最近最少使用”，LRU缓存就是使用这种原理实现，简单的说就是缓存一定量的数据，当超过设定的阈值时就把一些过期的数据删除掉，比如我们缓存10000条数据，当数据小于10000时可以随意添加，当超过10000时就需要把新的数据添加进来，同时要把过期数据删除，以确保我们最大缓存10000条，那怎么确定删除哪条过期数据呢，采用LRU算法实现的话就是将最老的数据删掉。</p>
+<p> 1.）初始化MemoryCache</p>
+<p>  这里内存缓存的是Drawable 而不是Bitmap 理由是Drawable相对Bitmap来说有很大的内存优势<br>  int maxMemory = (int) Runtime.getRuntime().maxMemory();//获取系统分配给应用的总内存大小<br>  int mCacheSize = maxMemory / 8;//设置图片内存缓存占用八分之一<br>  mMemoryCache = new LruCache<string, drawable="">(mCacheSize) {<br>  //必须重写此方法，来测量Bitmap的大小<br>  @Override<br>  protected int sizeOf(String key, Drawable value) {<br>  　　if (value instanceof BitmapDrawable) {<br>  　　　　Bitmap bitmap = ((BitmapDrawable) value).getBitmap();<br>  　　　　return bitmap == null ? 0 : bitmap.getByteCount();<br>　　　}<br>　　　return super.sizeOf(key, value);<br>            }<br>        };</string,></p>
+<p>2.）添加一个Drawable到内存缓存<br>    /**</p>
+<pre><code> * 添加Drawable到内存缓存
+ *
+ * @param key
+ * @param drawable
+ */
+private void addDrawableToMemoryCache(String key, Drawable drawable) {
+    if (getDrawableFromMemCache(key) == null &amp;&amp; drawable != null) {
+        mMemoryCache.put(key, drawable);
+    }
+}
+</code></pre><p>3.）从内存缓存中获取一个Drawable</p>
+<pre><code>/**
+ * 从内存缓存中获取一个Drawable
+ *
+ * @param key
+ * @return
+ */
+public Drawable getDrawableFromMemCache(String key) {
+    return mMemoryCache.get(key);
+}
+</code></pre><p>4.）从内存缓存中移除一个Drawable</p>
+<p>   /**</p>
+<pre><code> * 从内存缓存中移除
+ *
+ * @param key
+ */
+public void removeCacheFromMemory(String key) {
+    mMemoryCache.remove(key);
+}
+</code></pre><p>5.）清空内存缓存</p>
+<pre><code>/**
+ * 清理内存缓存
+ */
+public void cleanMemoryCCache() {
+    mMemoryCache.evictAll();
+}
+</code></pre><p>其实Lru缓存机制本质上就是存储在一个LinkedHashMap存储，为了保障插入的数据顺序，方便清理。</p>
+<p>基于DiskLruCache实现磁盘缓存：</p>
+<p>   DiskLruCache类并不是谷歌官方实现，需要自行下载，下载地址：<a href="https://github.com/JakeWharton/DiskLruCache" target="_blank" rel="noopener">https://github.com/JakeWharton/DiskLruCache</a></p>
+<p>  1.）初始化DiskLruCache</p>
+<pre><code>File cacheDir = context.getCacheDir();//指定的是数据的缓存地址
+ long diskCacheSize = 1024 * 1024 * 30;//最多可以缓存多少字节的数据
+ int appVersion = DiskLruUtils.getAppVersion(context);//指定当前应用程序的版本号
+ int valueCount = 1;//指定同一个key可以对应多少个缓存文件
+ try {
+     mDiskCache = DiskLruCache.open(cacheDir, appVersion, valueCount, diskCacheSize);
+ } catch (Exception ex) {
+ }
+</code></pre><p>2.）写入一个文件到磁盘缓存</p>
+<pre><code>/**
+ * 添加Bitmap到磁盘缓存
+ *
+ * @param key
+ * @param value
+ */
+private void addBitmapToDiskCache(String key, byte[] value) {
+    OutputStream out = null;
+    try {
+        DiskLruCache.Editor editor = mDiskCache.edit(key);
+        if (editor != null) {
+            out = editor.newOutputStream(0);
+            if (value != null &amp;&amp; value.length &gt; 0) {
+                out.write(value);
+                out.flush();
+                editor.commit();
+            } else {
+                editor.abort();
+            }
+        }
+        mDiskCache.flush();
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        DiskLruUtils.closeQuietly(out);
+    }
+}
+</code></pre><p>3.）从磁盘缓存中读取Drawable</p>
+<pre><code>/**
+ * 从磁盘缓存中获取一个Drawable
+ *
+ * @param key
+ * @return
+ */
+public Drawable getDrawableFromDiskCache(String key) {
+    try {
+        DiskLruCache.Snapshot snapShot = mDiskCache.get(key);
+        if (snapShot != null) {
+            InputStream is = snapShot.getInputStream(0);
+            Bitmap bitmap = BitmapFactory.decodeStream(is);
+            Drawable drawable = DiskLruUtils.bitmap2Drawable(bitmap);
+            //从磁盘中读取到之后 加入内存缓存
+            addDrawableToMemoryCache(key, drawable);
+            return drawable;
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+</code></pre><p>4.）从磁盘缓存中移除</p>
+<pre><code>/**
+ * 从磁盘缓存中移除
+ *
+ * @param key
+ */
+public void removeCacheFromDisk(String key) {
+    try {
+        mDiskCache.remove(key);
+    } catch (Exception e) {
+    }
+}
+</code></pre><p>5.）清空磁盘缓存</p>
+<pre><code>/**
+ * 清理磁盘缓存
+ */
+public void cleanDiskCache() {
+    try {
+        mDiskCache.delete();
+    } catch (Exception e) {
+    }
+}
+</code></pre><p>图片下载过程：</p>
+<p>   接下来实例中用到了一点RxJava的知识有不了解RxJava的请自行了解一下。</p>
+<p>  1.）采用异步方式操作磁盘缓存和网络下载， 内存缓存可以在主线程中操作</p>
+<p>   public void disPlay(final ImageView imageView, String imageUrl) {<br>        //生成唯一key<br>        final String key = DiskLruUtils.hashKeyForDisk(imageUrl);<br>        //先从内存中读取<br>        Drawable drawableFromMemCache = getDrawableFromMemCache(key);<br>        if (drawableFromMemCache != null) {<br>            imageView.setImageDrawable(drawableFromMemCache);<br>            return;<br>        }<br>        Observable.just(imageUrl)<br>                .map(new Func1<string, drawable="">() {<br>                    @Override<br>                    public Drawable call(String imageUrl) { // 参数类型 String<br>                        //从磁盘中读取<br>                        Drawable drawableFromDiskCache = getDrawableFromDiskCache(key);<br>                        if (drawableFromDiskCache != null) {<br>                            return drawableFromDiskCache;<br>                        }<br>                        //网络下载<br>                        return download(imageUrl); // 返回类型 Drawable<br>                    }<br>                })<br>                .subscribeOn(Schedulers.io()) // 指定 subscribe() 发生在 IO 线程<br>                .observeOn(AndroidSchedulers.mainThread()) // 指定 Subscriber 的回调发生在主线程<br>                .subscribe(new Action1<drawable>() {<br>                    @Override<br>                    public void call(Drawable drawable) { // 参数类型 Drawable<br>                        imageView.setImageDrawable(drawable);<br>                    }<br>                });<br>    }</drawable></string,></p>
+<p>2.）下载图片过程以及处理</p>
+<p> private Drawable download(String imageUrl) {<br>        HttpURLConnection urlConnection = null;<br>        ByteArrayOutputStream bos = null;<br>        InputStream ins = null;<br>        try {<br>            final URL url = new URL(imageUrl);<br>            urlConnection = (HttpURLConnection) url.openConnection();<br>            ins = urlConnection.getInputStream();<br>            bos = new ByteArrayOutputStream();<br>            int b;<br>            while ((b = ins.read()) != -1) {<br>                bos.write(b);<br>            }<br>            bos.flush();<br>            byte[] bytes = bos.toByteArray();<br>            Bitmap bitmap = DiskLruUtils.bytes2Bitmap(bytes);<br>            String key = DiskLruUtils.hashKeyForDisk(imageUrl);<br>            Drawable drawable = DiskLruUtils.bitmap2Drawable(bitmap);<br>            //加入内存缓存<br>            addDrawableToMemoryCache(key, drawable);<br>            //加入磁盘缓存<br>            addBitmapToDiskCache(key, bytes);<br>            return drawable;<br>        } catch (IOException e) {<br>            e.printStackTrace();<br>        } finally {<br>            if (urlConnection != null) {<br>                urlConnection.disconnect();<br>            }<br>            DiskLruUtils.closeQuietly(bos);<br>            DiskLruUtils.closeQuietly(ins);<br>        }<br>        return null;<br>    }</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+            
+    
+        <a href="http://b.nearby.ren/2016/06/18/Android之Lru算法/#comments" class="article-comment-link">评论</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2016/09/21/androidstudiosvn设置忽略/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    androidstudiosvn设置忽略
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2016/06/17/Android之Glide缓存/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Android之Glide缓存</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    <section id="comments">
+    
+        
+    <div id="uyan_frame"></div>
+
+    
+    </section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/10/06/sync.WaitGroup使用说明的副本/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/go/">go</a></p>
+                            <p class="item-title"><a href="/2018/10/06/sync.WaitGroup使用说明的副本/" class="title">Go语言中 new()和make()的区别详解</a></p>
+                            <p class="item-date"><time datetime="2018-10-06T10:30:12.000Z" itemprop="datePublished">2018-10-06</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/10/05/sync.WaitGroup使用说明/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/go/">go</a></p>
+                            <p class="item-title"><a href="/2018/10/05/sync.WaitGroup使用说明/" class="title">Go sync包 WaitGroup使用</a></p>
+                            <p class="item-date"><time datetime="2018-10-05T08:30:12.000Z" itemprop="datePublished">2018-10-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/09/08/android studio升级之后很多jar无法下载 解决/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/android-studio/">android studio</a></p>
+                            <p class="item-title"><a href="/2018/09/08/android studio升级之后很多jar无法下载 解决/" class="title">android studio升级之后很多jar无法下载 解决</a></p>
+                            <p class="item-date"><time datetime="2018-09-08T08:03:12.000Z" itemprop="datePublished">2018-09-08</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/09/05/mac android studio 无线调试/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/android/">android</a></p>
+                            <p class="item-title"><a href="/2018/09/05/mac android studio 无线调试/" class="title">mac android studio 无线调试</a></p>
+                            <p class="item-date"><time datetime="2018-09-05T08:30:12.000Z" itemprop="datePublished">2018-09-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/03/05/Flutter Widget 之旅/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/flutter/">flutter</a></p>
+                            <p class="item-title"><a href="/2018/03/05/Flutter Widget 之旅/" class="title">Flutter Widget 之旅</a></p>
+                            <p class="item-date"><time datetime="2018-03-05T08:30:12.000Z" itemprop="datePublished">2018-03-05</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a><span class="category-list-count">23</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/android-studio/">android studio</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/apk/">apk</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/dagger2/">dagger2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/flutter/">flutter</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/go/">go</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gradle/">gradle</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/markdown/">markdown</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mvp/">mvp</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/rxjava/">rxjava</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring/">spring</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tinker/">tinker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuforia/">vuforia</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/文字/">文字</a><span class="category-list-count">7</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">30</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bug/">bug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dagger2/">dagger2</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/glide/">glide</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/">go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gradle/">gradle</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5/">h5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ios/">ios</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/">mac</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mvp/">mvp</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume/">resume</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rxandroid/">rxandroid</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rxjava/">rxjava</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/service/">service</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springboot/">springboot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/view/">view</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuforia/">vuforia</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文字/">文字</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/歌曲/">歌曲</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/直播/">直播</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔录/">笔录</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a><span class="tag-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/android/" style="font-size: 20px;">android</a> <a href="/tags/bug/" style="font-size: 10px;">bug</a> <a href="/tags/dagger2/" style="font-size: 12.5px;">dagger2</a> <a href="/tags/git/" style="font-size: 17.5px;">git</a> <a href="/tags/glide/" style="font-size: 15px;">glide</a> <a href="/tags/go/" style="font-size: 12.5px;">go</a> <a href="/tags/gradle/" style="font-size: 12.5px;">gradle</a> <a href="/tags/h5/" style="font-size: 10px;">h5</a> <a href="/tags/hexo/" style="font-size: 12.5px;">hexo</a> <a href="/tags/https/" style="font-size: 12.5px;">https</a> <a href="/tags/ios/" style="font-size: 12.5px;">ios</a> <a href="/tags/java/" style="font-size: 12.5px;">java</a> <a href="/tags/mac/" style="font-size: 12.5px;">mac</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mvp/" style="font-size: 15px;">mvp</a> <a href="/tags/resume/" style="font-size: 15px;">resume</a> <a href="/tags/rxandroid/" style="font-size: 12.5px;">rxandroid</a> <a href="/tags/rxjava/" style="font-size: 12.5px;">rxjava</a> <a href="/tags/service/" style="font-size: 10px;">service</a> <a href="/tags/springboot/" style="font-size: 10px;">springboot</a> <a href="/tags/view/" style="font-size: 12.5px;">view</a> <a href="/tags/vuforia/" style="font-size: 10px;">vuforia</a> <a href="/tags/web/" style="font-size: 15px;">web</a> <a href="/tags/文字/" style="font-size: 12.5px;">文字</a> <a href="/tags/歌曲/" style="font-size: 12.5px;">歌曲</a> <a href="/tags/直播/" style="font-size: 10px;">直播</a> <a href="/tags/笔录/" style="font-size: 15px;">笔录</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2019 阿荣<br>
+            <!-- <a href="http://github.com/ppoffice">ppoffice</a>     
+            主题 - <a href="http://hexo.io/" target="_blank">Hexo</a> -->  
+             <a href="#" target="_blank">人生如逆旅  &phi; 我亦是行人 </a>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2119666"></script>
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

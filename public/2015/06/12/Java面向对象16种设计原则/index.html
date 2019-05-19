@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>Java面向对象16种设计原则 | nearby.ren</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="一   类的设计原则  1　依赖倒置原则－Dependency Inversion Principle (DIP)2　里氏替换原则－Liskov Substitution Principle (LSP)3　接口分隔原则－Interface Segregation Principle (ISP)4　单一职责原则－Single Responsibility Principle (SRP)5　开闭原则">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java面向对象16种设计原则">
+<meta property="og:url" content="http://b.nearby.ren/2015/06/12/Java面向对象16种设计原则/index.html">
+<meta property="og:site_name" content="nearby.ren">
+<meta property="og:description" content="一   类的设计原则  1　依赖倒置原则－Dependency Inversion Principle (DIP)2　里氏替换原则－Liskov Substitution Principle (LSP)3　接口分隔原则－Interface Segregation Principle (ISP)4　单一职责原则－Single Responsibility Principle (SRP)5　开闭原则">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2016-11-21T14:59:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java面向对象16种设计原则">
+<meta name="twitter:description" content="一   类的设计原则  1　依赖倒置原则－Dependency Inversion Principle (DIP)2　里氏替换原则－Liskov Substitution Principle (LSP)3　接口分隔原则－Interface Segregation Principle (ISP)4　单一职责原则－Single Responsibility Principle (SRP)5　开闭原则">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="nearby.ren" type="application/atom+xml">
+    
+
+    
+        <link rel="icon" href="/css/images/super.png# path to favicon">
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">nearby.ren</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">目录</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">目录</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">ARONG</h2>
+            <h3 id="title">Android server web</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>china, Hainan</span>
+            <a id="follow" target="_blank" href="https://github.com/mccapp">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                67
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                29
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://gitee.com/mccapp" target="_blank" title="github">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://twitter.com/" target="_blank" title="twitter">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://www.facebook.com/" target="_blank" title="facebook">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="https://dribbble.com/" target="_blank" title="dribbble">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/atom.xml" target="_blank" title="rss">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Java面向对象16种设计原则" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Java面向对象16种设计原则
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2015/06/12/Java面向对象16种设计原则/">
+            <time datetime="2015-06-12T08:51:40.000Z" itemprop="datePublished">2015-06-12</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/java/">java</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/设计模式/">设计模式</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <blockquote>
+<p>一   类的设计原则</p>
+</blockquote>
+<p>1　依赖倒置原则－Dependency Inversion Principle (DIP)<br>2　里氏替换原则－Liskov Substitution Principle (LSP)<br>3　接口分隔原则－Interface Segregation Principle (ISP)<br>4　单一职责原则－Single Responsibility Principle (SRP)<br>5　开闭原则－The Open-Closed Principle (OCP)</p>
+<blockquote>
+<p>二  包的设计原则</p>
+</blockquote>
+<p>6　重用发布等价原则－Release ReuseEquivalency Principle (REP)<br>7　无环依赖原则－The AcyclicDependencies Principle (ADP)<br>8　稳定依赖原则－The StableDependencies Principle (SDP)<br>9　稳定抽象等价原则－The StableAbstractions Principle (SAP)<br>10　共同封闭原则－The CommonClosure Principle (CCP)<br>11　全部重用原则－The Common Reuse Principle (CRP)</p>
+<blockquote>
+<p>三  扩展原则</p>
+</blockquote>
+<p>12  迪米特法则 －Least Knowledge Principle (LKP)<br>13  黑盒原则－ BBP(Black Box Principle)<br>14  缺省抽象原则 －DAP(Default Abstraction Principle)<br>15  接口设计原则 －IDP(Interface Design Principle)<br>16  不要构造具体的超类原则 －DCSP(Don’t Concrete SupperclassPrinciple)</p>
+<blockquote>
+<ol>
+<li>Dependency Inversion Principle (DIP) - 依赖倒置原则</li>
+</ol>
+</blockquote>
+<p>依赖：在程序设计中，如果一个模块a使用或调用了另一个模块b，我们称模块a依赖模块b。<br>高层模块与低层模块：往往在一个应用程序中，我们有一些低层次的类，这些类实现了一些基本的或初级的操作，我们称之为低层模块；另外有一些高层次的类，这些类封装了某些复杂的逻辑，并且依赖于低层次的类，这些类我们称之为高层模块。</p>
+<blockquote>
+<p>依赖倒置原则的2个重要方针：</p>
+</blockquote>
+<ol>
+<li>高层模块不应该依赖于低层模块，二者都应该依赖于抽象</li>
+<li>抽象不应该依赖于细节，细节应该依赖于抽象</li>
+</ol>
+<blockquote>
+<p>为什么叫做依赖倒置（Dependency Inversion）呢？</p>
+</blockquote>
+<p>面向对象程序设计相对于面向过程（结构化）程序设计而言，依赖关系被倒置了。因为传统的结构化程序设计中，高层模块总是依赖于低层模块。</p>
+<p>问题的提出：</p>
+<p>Robert C. Martin在原文中给出了“Bad Design”的定义：</p>
+<ol>
+<li>系统很难改变，因为每个改变都会影响其他很多部分。</li>
+<li>当你对某地方做一修改，系统的看似无关的其他部分都不工作了。</li>
+<li>系统很难被另外一个应用重用，因为你很难将要重用的部分从系统中分离开来。</li>
+</ol>
+<p>导致“Bad Design”的很大原因是“高层模块”过分依赖“低层模块”。一个良好的设计应该是系统的每一部分都是可替换的。如果“高层模块”过分依赖“低层模块”，一方面一旦“低层模块”需要替换或者修改，“高层模块”将受到影响；另一方面，高层模块很难可以重用。</p>
+<p>比如，一个Copy模块，需要把来自Keyboard的输入复制到Print，即使对Keyboard和Print的封装已经做得非常好，但如果Copy模块里直接使用Keyboard与Print，Copy任很难被其他应用环境（比如需要输出到磁盘时）重用。</p>
+<blockquote>
+<p>问题的解决：</p>
+</blockquote>
+<p>为了解决上述问题，Robert C. Martin提出了OO设计的Dependency Inversion Principle (DIP) 原则。<br>DIP给出了一个解决方案：在高层模块与低层模块之间，引入一个抽象接口层。<br>High Level Classes（高层模块） –&gt; Abstraction Layer（抽象接口层） –&gt; Low Level Classes（低层模块）<br>抽象接口是对低层模块的抽象，低层模块继承或实现该抽象接口。<br>这样，高层模块不直接依赖低层模块，高层模块与低层模块都依赖抽象接口层。<br>当然，抽象也不依赖低层模块的实现细节，低层模块依赖（继承或实现）抽象定义。</p>
+<blockquote>
+<p>Robert C. Martin给出的DIP方案的类的结构图：</p>
+</blockquote>
+<p>PolicyLayer–&gt;MechanismInterface(abstract)–MechanismLayer–&gt;UtilityInterface(abstract)–UtilityLayer<br>类与类之间都通过Abstract Layer来组合关系。</p>
+<ol>
+<li>Liskov Substitution Principle (LSP) - 里氏替换原则</li>
+</ol>
+<p>所有引用基类的地方必须能透明地使用其子类的对象。也就是说，只有满足以下2个条件的OO设计才可被认为是满足了LSP原则：<br>A  不应该在代码中出现if/else之类对子类类型进行判断的条件。以下代码就违反LSP定义。</p>
+<pre><code>if (obj typeof Class1) {
+     do something
+} else if (obj typeof Class2) {
+     do something else
+}
+</code></pre><p>B  子类应当可以替换父类并出现在父类能够出现的任何地方，或者说如果我们把代码中使用基类的地方用它的子类所代替，代码还能正常工作。</p>
+<blockquote>
+<p>里氏替换原则LSP是使代码符合开闭原则的一个重要保证。同时LSP体现了：</p>
+</blockquote>
+<p>1） 类的继承原则：如果一个继承类的对象可能会在基类出现地方出现运行错误，则该子类不应该从该基类继承，或者说，应该重新设计它们之间的关系。<br>2）动作正确性保证：从另一个侧面上保证了符合LSP设计原则的类的扩展不会给已有的系统引入新的错误。</p>
+<blockquote>
+<p>类的继承原则：</p>
+</blockquote>
+<p>Robert C. Martin举了Rectangle和Square的例子。这里沿用这个例子，但用Java语言对其加以重写，并忽略了某些细节只列出下面的精要部分来说明 里氏替换原则 对类的继承上的约束。</p>
+<pre><code>class Rectangle {   
+    double width;   
+    double height;   
+
+    public double getHeight() {   
+        return height;   
+     }   
+    public void setHeight(double height) {   
+        this.height = height;   
+     }   
+    public double getWidth() {   
+        return width;   
+     }   
+    public void setWidth(double width) {   
+        this.width = width;   
+     }      
+}   
+
+class Square extends Rectangle {   
+    public void setHeight(double height) {   
+        super.setHeight(height);   
+        super.setWidth(height);   
+     }   
+
+    public void setWidth(double width) {   
+        super.setHeight(width);   
+        super.setWidth(width);   
+     }   
+}  
+class Rectangle {
+      double width;
+      double height;
+
+
+      public double getHeight() {
+          return height;
+      }
+      public void setHeight(double height) {
+          this.height = height;
+      }
+      public double getWidth() {
+          return width;
+      }
+      public void setWidth(double width) {
+          this.width = width;
+      }    
+}
+
+class Square extends Rectangle {
+      public void setHeight(double height) {
+          super.setHeight(height);
+          super.setWidth(height);
+      }
+
+      public void setWidth(double width) {
+          super.setHeight(width);
+          super.setWidth(width);
+      }
+}
+</code></pre><blockquote>
+<p>这里Rectangle是基类，Square从Rectangle继承。这种继承关系有什么问题吗？</p>
+</blockquote>
+<p>假如已有的系统中存在以下既有的业务逻辑代码：</p>
+<pre><code>void g(Rectangle r) {
+     r.setWidth(5);
+     r.setHeight(4);
+     if (r.getWidth() * r.getHeight() != 20) {
+         throw new RuntimeException();
+     }
+}
+</code></pre><p>则对应于扩展类Square，在调用既有业务逻辑时：<br>         Rectangle square = new Square();<br>         g(square);<br>时会抛出一个RuntimeException异常。这显然违反了LSP原则。</p>
+<blockquote>
+<p>动作正确性保证：</p>
+</blockquote>
+<p>因为LSP对子类的约束，所以为已存在的类做扩展构造一个新的子类时，根据LSP的定义，不会给已有的系统引入新的错误。<br>Design by Contract<br>         根据Bertrand Meyer提出的Design by Contract（DBC：基于合同的设计）概念的描述，对于类的一个方法，都有一个前提条件以及一个后续条件，前提条件说明方法接受什么样的参数数据等，只有前提条件得到满足时，这个方法才能被调用；同时后续条件用来说明这个方法完成时的状态，如果一个方法的执行会导致这个方法的后续条件不成立，那么此方法也不应该正常返回。<br>         现在把前提条件以及后续条件应用到继承子类中，子类方法应该满足：<br>１）前提条件不强于基类．<br>２）后续条件不弱于基类．<br>        换句话说，通过基类的接口调用一个对象时，用户只知道基类前提条件以及后续条件。因此继承类不得要求用户提供比基类方法要求的更强的前提条件，亦即，继承类方法必须接受任何基类方法能接受的任何条件（参数）。同样，继承类必须顺从基类的所有后续条件，亦即，继承类方法的行为和输出不得违反由基类建立起来的任何约束，不能让用户对继承类方法的输出感到困惑。这样，我们就有了基于合同的LSP，基于合同的LSP是LSP的一种强化。</p>
+<p>在很多情况下，在设计初期我们类之间的关系不是很明确，LSP则给了我们一个判断和设计类之间关系的基准：需不需要继承，以及怎样设计继承关系。</p>
+<blockquote>
+<ol>
+<li>Interface Segregation Principle (ISP) - 接口分隔原则</li>
+</ol>
+</blockquote>
+<p>不能强迫用户去依赖那些他们不使用的接口。换句话说，使用多个专门的接口比使用单一的总接口总要好。它包含了2层意思：<br>1）接口的设计原则：接口的设计应该遵循最小接口原则，不要把用户不使用的方法塞进同一个接口里。<br>   如果一个接口的方法没有被使用到，则说明该接口过胖，应该将其分割成几个功能专一的接口。<br>2）接口的依赖（继承）原则：如果一个接口a依赖（继承）另一个接口b，则接口a相当于继承了接口b的方法，那么继承了接口b后的接口a也应该遵循上述原则：不应该包含用户不使用的方法。   反之，则说明接口a被b给污染了，应该重新设计它们的关系。</p>
+<p>如果用户被迫依赖他们不使用的接口，当接口发生改变时，他们也不得不跟着改变。换而言之，一个用户依赖了未使用但被其他用户使用的接口，当其他用户修改该接口时，依赖该接口的所有用户都将受到影响。这显然违反了开闭原则，也不是我们所期望的。</p>
+<p>下面我们举例说明怎么设计接口或类之间的关系，使其不违反ISP原则。<br>假如有一个Door，有lock，unlock功能，另外，可以在Door上安装一个Alarm而使其具有报警功能。用户可以选择一般的Door，也可以选择具有报警功能的Door。</p>
+<blockquote>
+<p>有以下几种设计方法： ISP原则的违反例：</p>
+</blockquote>
+<p><strong>方法一：</strong><br>在Door接口里定义所有的方法。图：<br>但这样一来，依赖Door接口的CommonDoor却不得不实现未使用的alarm()方法。违反了ISP原则。</p>
+<p><strong>方法二：</strong><br>在Alarm接口定义alarm方法，在Door接口定义lock，unlock方法，Door接口继承Alarm接口。</p>
+<p>跟方法一一样，依赖Door接口的CommonDoor却不得不实现未使用的alarm()方法。违反了ISP原则。<br>遵循ISP原则的例：</p>
+<p><strong>方法三：通过多重继承实现</strong><br>Adapter设计模式的实现。<br>第2）种方案更具有实用性。<br>这种设计遵循了ISP设计原则。</p>
+<p><strong>方法四：通过委托实现</strong><br>在Alarm接口定义alarm方法，在Door接口定义lock，unlock方法。接口之间无继承关系。CommonDoor实现Door接口，<br>AlarmDoor有2种实现方案：<br>1）同时实现Door和Alarm接口。<br>2）继承CommonDoor，并实现Alarm接口。该方案是继承方式的<br>小结<br>Interface Segregation Principle (ISP)从对接口的使用上为我们对接口抽象的颗粒度建立了判断基准：在为系统设计接口的时候，使用多个专门的接口代替单一的胖接口。</p>
+<blockquote>
+<ol>
+<li>Single Responsibility Principle (SRP) - 单一职责原则</li>
+</ol>
+</blockquote>
+<p>永远不要让一个类存在多个改变的理由。换句话说，如果一个类需要改变，改变它的理由永远只有一个。如果存在多个改变它的理由，就需要重新设计该类。</p>
+<p>SRP（Single Responsibility Principle）原则的核心含意是：只能让一个类有且仅有一个职责。这也是单一职责原则的命名含义。</p>
+<blockquote>
+<p>为什么一个类不能有多于一个以上的职责呢？</p>
+</blockquote>
+<p>如果一个类具有一个以上的职责，那么就会有多个不同的原因引起该类变化，而这种变化将影响到该类不同职责的使用者（不同用户）：<br>1，一方面，如果一个职责使用了外部类库，则使用另外一个职责的用户却也不得不包含这个未被使用的外部类库。<br>2，另一方面，某个用户由于某原因需要修改其中一个职责，另外一个职责的用户也将受到影响，他将不得不重新编译和配置。这违反了设计的开闭原则，也不是我们所期望的。</p>
+<p>职责的划分<br>既然一个类不能有多个职责，那么怎么划分职责呢？<br>Robert.C Martin给出了一个著名的定义：所谓一个类的一个职责是指引起该类变化的一个原因。如果你能想到一个类存在多个使其改变的原因，那么这个类就存在多个职责。</p>
+<p>Single Responsibility Principle (SRP)的原文里举了一个Modem的例子来说明怎么样进行职责的划分，这里我们也沿用这个例子来说明一下：</p>
+<p>SRP违反例：</p>
+<pre><code>Modem.java
+interface Modem {
+     public void dial(String pno);     //拨号
+     public void hangup();         //挂断
+     public void send(char c);     //发送数据
+     public char recv();         //接收数据
+}
+</code></pre><p>咋一看，这是一个没有任何问题的接口设计。但事实上，这个接口包含了2个职责：第一个是连接管理（dial, hangup）；另一个是数据通信（send, recv）。很多情况下，这2个职责没有任何共通的部分，它们因为不同的理由而改变，被不同部分的程序调用。<br>所以它违反了SRP原则。</p>
+<p>下面的类图将它的2个不同职责分成2个不同的接口，这样至少可以让客户端应用程序使用具有单一职责的接口：<br>让ModemImplementation实现这两个接口。我们注意到，ModemImplementation又组合了2个职责，这不是我们希望的，但有时这又是必须的。通常由于某些原因，迫使我们不得不绑定多个职责到一个类中，但我们至少可以通过接口的分割来分离应用程序关心的概念。<br>事实上，这个例子一个更好的设计应该是这样的，如图：<br>小结<br>Single Responsibility Principle (SRP)从职责（改变理由）的侧面上为我们对类（接口）的抽象的颗粒度建立了判断基准：在为系统设计类（接口）的时候应该保证它们的单一职责性。</p>
+<blockquote>
+<ol>
+<li>The Open-Closed Principle (OCP) - 开闭原则</li>
+</ol>
+</blockquote>
+<p>开闭原则（OCP：Open-Closed Principle）是指在进行面向对象设计（OOD：Object Oriented Design）中，设计类或其他程序单位时，应该遵循：</p>
+<ul>
+<li>对扩展开放（open）</li>
+<li>对修改关闭（closed）</li>
+</ul>
+<p>开闭原则是判断面向对象设计是否正确的最基本的原理之一。 根据开闭原则，在设计一个软件系统模块（类，方法）的时候，应该可以在不修改原有的模块（修改关闭）的基础上，能扩展其功能（扩展开放）。<br>A  扩展开放：某模块的功能是可扩展的，则该模块是扩展开放的。软件系统的功能上的可扩展性要求模块是扩展开放的。<br> B 修改关闭：某模块被其他模块调用，如果该模块的源代码不允许修改，则该模块修改关闭的。软件系统的功能上的稳定性，持续性要求是修改关闭的。</p>
+<p>这也是系统设计需要遵循开闭原则的原因：<br>1）稳定性。开闭原则要求扩展功能不修改原来的代码，这可以让软件系统在变化中保持稳定。<br>2）扩展性。开闭原则要求对扩展开放，通过扩展提供新的或改变原有的功能，让软件系统具有灵活的可扩展性。<br>遵循开闭原则的系统设计，可以让软件系统可复用，并且易于维护。</p>
+<p>开闭原则的实现方法<br>为了满足开闭原则的 对修改关闭（closed for modification） 原则以及扩展开放（open for extension） 原则，应该对软件系统中的不变的部分加以抽象，在面向对象的设计中，<br>A 可以把这些不变的部分加以抽象成不变的接口，这些不变的接口可以应对未来的扩展；<br>B 接口的最小功能设计原则。根据这个原则，原有的接口要么可以应对未来的扩展；不足的部分可以通过定义新的接口来实现；<br>C 模块之间的调用通过抽象接口进行，这样即使实现层发生变化，也无需修改调用方的代码。</p>
+<p>接口可以被复用，但接口的实现却不一定能被复用。接口是稳定的，关闭的，但接口的实现是可变的，开放的。可以通过对接口的不同实现以及类的继承行为等为系统增加新的或改变系统原来的功能，实现软件系统的柔软扩展。</p>
+<pre><code>简单地说，软件系统是否有良好的接口（抽象）设计是判断软件系统是否满足开闭原则的一种重要的判断基准。现在多把开闭原则等同于面向接口的软件设计。
+</code></pre><p>开闭原则的相对性<br>软件系统的构建是一个需要不断重构的过程，在这个过程中，模块的功能抽象，模块与模块间的关系，都不会从一开始就非常清晰明了，所以构建100%满足开闭原则的软件系统是相当困难的，这就是开闭原则的相对性。但在设计过程中，通过对模块功能的抽象（接口定义），模块之间的关系的抽象（通过接口调用），抽象与实现的分离（面向接口的程序设计）等，可以尽量接近满足开闭原则。</p>
+<blockquote>
+<ol>
+<li>Release Reuse Equivalency Principle (REP) - 重用发布等价原则</li>
+</ol>
+</blockquote>
+<p>包的内部关系方面（聚合性）的原则，重用粒度等价于发布粒度。重用主要是从用户的观点来看的。对用户来说，使用某个发布单位（组件，类，类群等），如果作者因为某种原因对其作了修改而发布了一个新的版本，用户会期望在升级为新版本之后，不会影响到原系统的正常运作。<br>也就是说，对于一个可重用（能供其它用户或系统使用）的元素（组件，类，类群等），作者应该承诺新版本能够兼容旧版本。否则，用户将拒绝使用该元素。</p>
+<blockquote>
+<p>Robert C. Martin给出的对重用的定义：</p>
+</blockquote>
+<p>代码可以看作为可重用的代码，当且仅当：</p>
+<ul>
+<li>它的使用者（下称用户）无需看它的源代码</li>
+<li>用户只需联结静态库或包含动态库</li>
+<li>当库发生改变（错误纠正，功能增强）时，用户只需要得到一个新的版本便能集成到原有的系统</li>
+</ul>
+<p>怎么做到重用呢？<br>一个组件要做到能够重用，它必须有一个得到良好设计的结构，它所包含所有元素必须也是可以重用的。<br>因为如果一个为重用而设计的发布单位里，包含了不可重用的元素，当不可重用的元素发生改变时，用户也不得不改变原有系统以适应新的版本。这显然违反了重用的定义规则。<br>也就是说，一个为重用目的而设计的发布单位里，不能包含不可重用的元素；如果包含了不可重用的元素，它将变得不可重用。</p>
+<p>发布单位<br>当用户使用的重用组件被作者修改后，用户希望得到通知，然后决定是否升级或升级的时机。为了能使升级后的系统也能正常运作，用户也希望作者有一个规范的发布，包括版本号，类库的说明等等。<br>一旦用户决定升级新版本，不管这些修改是否影响到用户，用户也不得不包含新版本所包含的所有类库。</p>
+<p>REP规定重用粒度不能小于发布粒度，所有重用元素也必须被一起发布。</p>
+<p>发布粒度可以为包（组件）或类等实体，但一个应用往往包含了很多类，所以，具有更大的尺度的包（组件）更加适合作为发布粒度。</p>
+<p>重用发布等价原则为我们指明了包的设计方针：一个包中的元素（类）要么都可重用，要么都不可重用。</p>
+<p>小结<br>重用发布等价原则（REP）从用户观点的角度上为我们规范了包设计的原则：在设计包时，包中应该包含的元素要么都可以重用，要么都不可以重用。</p>
+<blockquote>
+<ol>
+<li>The Acyclic Dependencies Principle (ADP) - 无环依赖原则</li>
+</ol>
+</blockquote>
+<p>包之间的依赖结构必须是一个直接的无环图形（DAG）。也就是说，在依赖结构中不允许出现环（循环依赖）。换成另一个说法是： 包间依赖不能是一个环状形式。包间关系方面（耦合性）的原则</p>
+<p>包的依赖<br>如果一个包A 中的类引用了包B中的类，我们称包A依赖包B。<br>“依赖”在具体的程序语言中表现为，如果A依赖B，C/C++语言则在A包的文件/类中通过#include语句包含B包中的文件/类；Java语言则A包的类中通过import语句引入B包中的类。</p>
+<p>图1（包A依赖包B）<br>虚线表示一种依赖关系，箭头表示依赖的方向，箭头所在的一侧就是被依赖的包。</p>
+<p>包的循环依赖<br>我们上面讨论了并用图形表示了包之间的依赖关系。如果存在2个或2个以上的包，它们之间的依赖关系图出现了环状，我们就称包之间存在循环依赖关系。<br>也就是说它们的依赖结构图根据箭头的方向形成了一个环状的闭合图形。如图：<br>图2：包的循环依赖<br>如图：A依赖B，B依赖C，C依赖A，形成了一个环状依赖。<br>包的非循环依赖原则<br>包是一个比较合适的发布粒度，当修改了包中的代码（类，模块等）并发布新的版本时，我们需要把该包以及它所依赖的其它包一起发布。发布之后，还需要验证系统是否能在新发布的版本下正常运作。<br>如果多个包之间形成了循环依赖，比如如图2，A依赖B，B依赖C，C依赖A，我们修改了B并需要发布B的一个新的版本，因为B依赖C，所以发布时应该包含C，但C同时又依赖A，所以又应该把A也包含进发布版本里。也就是说，依赖结构中，出现在环内的所有包都不得不一起发布。它们形成了一个高耦合体，当项目的规模大到一定程度，包的数目变多时，包与包之间的关系便变得错综复杂，各种测试也将变得非常困难，常常会因为某个不相关的包中的错误而使得测试无法继续。而发布也变得复杂，需要把所有的包一起发布，无疑增加了发布后的验证难度。</p>
+<p>循环依赖的打破方法<br>如果包的依赖形成了环状结构，怎么样打破这种循环依赖呢？<br>有2种方法可以打破这种循环依赖关系：第一种方法是创建新的包，第二种方法是使用DIP（依赖倒置原则）和ISP（接口分隔原则）设计原则。</p>
+<p>方法一：创建新的包<br>比如对于图2这种依赖结构：</p>
+<p>图2：包的循环依赖</p>
+<p>包C要依赖包A，必定A中包含有A，C共通使用的类，把这些共同类抽出来放在一个新的包D里。这样就把C依赖A变成了C依赖D以及A依赖D，从而打破了循环依赖关系。如图：</p>
+<p>这样，包的依赖关系就从A-&gt;B-&gt;C-&gt;A变成了：<br>A-&gt;B-&gt;C-&gt;D<br>A-&gt;D</p>
+<p>方法二：DIP与ISP设计原则<br>ISP（接口分隔原则）可以剔除美用到的接口。DIP（依赖倒置原则）在类的调用之间引入抽象层。</p>
+<p>如图,，包A依赖包B（因为包A中的类U使用了包B中的类X）；反过来，包B又依赖包A（因为包B中的类Y使用了包A中的类V）</p>
+<p>包A，包B之间就形成了一种循环依赖。</p>
+<p>我们使用DIP设计原则为V抽象一个接口IVforY，并把该接口放在B包中。<br>这样就把Y对V的调用转化为：<br>V继承IVforY<br>Y调用IVforY<br>如图：</p>
+<p>这样一来，包B中的类就不依赖任何包A中的类了。<br>小结<br>无环依赖原则（ADP）为我们解决包之间的关系耦合问题。在设计包结构时，不能有循环依赖。</p>
+<blockquote>
+<ol>
+<li>The Stable Dependencies Principle (SDP) - 稳定依赖原则</li>
+</ol>
+</blockquote>
+<p>一个设计中的包之间的依赖应该朝着稳定的方向进行。一个包只应该依赖那些比自己更稳定的包。换成另一个说法是： 朝着稳定的方向进行依赖。包之间的关系方面（耦合性）的原则。</p>
+<p>包的依赖<br>如果一个包A 中的类引用了包B中的类，我们称包A依赖包B。<br>“依赖”在具体的程序语言中表现为，如果A依赖B，C/C++语言则在A包的文件/类中通过#include语句包含B包中的文件/类；Java语言则A包的类中通过import语句引入B包中的类。<br>图1（包A依赖包B）<br>虚线表示一种依赖关系，箭头表示依赖的方向，箭头所在的一侧就是被依赖的包。</p>
+<p>包的稳定依赖原则<br>包应该依赖比自己更稳定的包。因为如果依赖一个不稳定的包，那么当这个不稳定的包发生变化时，本身稳定的包也不得不发生变化，变得不稳定了。</p>
+<p>所谓稳定，在现实生活中是指一个物体具有稳固不变的属性使它很难发生变化。应用到软件概念上，我们认为一个软件是稳定的，是因为这个软件很难发生改变，或更确切地说，是不需要发生改变。一个设计良好，能应对各种变化不需要修改的软件当然是稳定的了，但事实上，往往一个软件常常需要对应某个事先没有预测到的用户需求而不得不发生改变，当这种改变发生时，能把修改控制在最小的范围之内，并能稳定的工作（包括软件本身以及依赖它的其它软件实体等），我们也会认为该软件是相对稳定的。</p>
+<p>怎么样让一个软件足够稳定呢？一个确切的方法是，让大量其它软件的包依赖它。一个包被很多其他包依赖是非常稳定的，这是因为被依赖的包为了协调其他包必须做很多的工作来对应各种变化（责任的负担者）。<br>图1：稳定的包X<br>我们认为X是稳定的，因为：</p>
+<ul>
+<li>X被很多其他包依赖。相当于责任担当着。</li>
+<li>X没有依赖别的包，它是独立的。</li>
+</ul>
+<p>相反，下面列出了一个非常不稳定的包Y，如图：</p>
+<p>图2：不稳定的包Y<br>我们认为Y是不稳定的，因为：</p>
+<ul>
+<li>Y没有被其他的包所依赖。不是责任的担当着。</li>
+<li>Y依赖很多别的包。<br>包的稳定性的判断原则<br>可以通过下面的方法来判断一个包的稳定系数：<br>Ca：Afferent Coupling。向心耦合。依赖该包（包含的类）的外部包（类）的数目（i.e. incoming dependencies）。<br>Ce： Efferent Coupling。离心耦合。被该包依赖的外部包的数目（i.e. outgoing dependencies）。<br>I： Instability。不稳定性。I=Ce/(Ce+Ca)。它的值处于[0，1]之间。<br>如图1，X的Ce=0，所以不稳定性I=0，它是稳定的。相反，如图2，Y的Ce=3，Ca=0，所以它的不稳定性I=1，它是不稳定的。</li>
+</ul>
+<p>SDP要求一个包的不稳定性I要大于它所依赖的包的不稳定性。换句话说，沿着依赖的方向，包的不稳定性应该逐渐降低，稳定性应该逐渐升高。</p>
+<p>稳定依赖原则（SDP）为我们解决包之间的关系耦合问题。在设计包结构时，包应该只依赖比自己更稳定的包。</p>
+<blockquote>
+<ol>
+<li>The Stable AbstractionsPrinciple (SAP) - 稳定抽象等价原则</li>
+</ol>
+</blockquote>
+<p>最稳定的包应该是最抽象的包。不稳定的包应该是具体的包。包的抽象程度跟它的稳定性成正比。稳定的包应该是抽象的包。</p>
+<p>包的稳定抽象等价原则</p>
+<p>我们在The Stable Dependencies Principle (SDP) - OO设计的稳定依赖原则 一文中谈到了包的稳定性：不容易改变的包应该具有更好的稳定性。</p>
+<p>一个包的抽象程度越高，它的稳定性就越高。反之，它的稳定性就越低。一个稳定的包必须是抽象的，反之，不稳定的包必须是具体的。<br>稳定的包的构成<br>抽象类或接口通过子类继承扩展行为，这表示抽象类或接口比它们的子类更具有稳定性。总之，为了构成稳定的包，应该提高包内的抽象类或接口的比率；它们的子类可以放在另一个不稳定的包内，该包依赖上述稳定的包，从而遵循了稳定依赖原则（SDP）。</p>
+<p>理想的体系结构应该是：<br>不稳定的（容易改变的）包处于上层</p>
+<ul>
+<li>它们是具体的包实现<br>稳定的（不容易改变的）包处于下层</li>
+<li>不容易改变，但容易扩展</li>
+<li>接口比实现（具体的运行代码）在内在特性上更具有稳定性<br>图1：遵循稳定依赖原则（SDP）的理想的体系结构</li>
+</ul>
+<p>小结<br>稳定抽象等价原则（SAP）为我们解决包之间的关系耦合问题。在设计包结构时，稳定的包应该是抽象的（由抽象类或接口构成），不稳定的包应该是具体的（由具体的实现类构成）。</p>
+<blockquote>
+<ol>
+<li>The Common ClosurePrinciple (CCP) - 共同封闭原则</li>
+</ol>
+</blockquote>
+<p>一个包中所有的类应该对同一种类型的变化关闭。一个变化影响一个包，便影响了包中所有的类。一个更简短的说法是：一起修改的类，应该组合在一起（同一个包里）。包的内部关系方面（聚合性）的原则</p>
+<p>如果必须修改应用程序里的代码，我们希望所有的修改都发生在一个包里（修改关闭），而不是遍布在很多包里。<br>CCP原则就是把因为某个同样的原因而需要修改的所有类组合进一个包里。如果2个类从物理上或者从概念上联系得非常紧密，它们通常一起发生改变，那么它们应该属于同一个包。</p>
+<p>CCP跟开闭原则（OCP: Open Closed Principle） 有着很深的渊源关系，CCP的“关闭”（closure）就是OCP所提倡的：classes should be closed for modification but open for extension. 类应该对修改关闭，对扩展开放。但我们知道，100%的“关闭”是不现实的，我们在设计系统时，只能尽量地保持对大多数可预见的修改关闭。<br>CCP延伸了OCP的“关闭”概念，当因为某个原因需要修改时，把需要修改的范围限制在一个最小范围内的包里。CCP原则帮助我们决定哪些类应该被放到同一个包里。</p>
+<p>小结<br>共同封闭原则（CCP）从软件功能的角度上为我们规范了包设计的一个原则：在设计包时，相互之间紧密关联的类应该放在同一包里。</p>
+<blockquote>
+<ol>
+<li>The Common Reuse Principle (CRP) - 全部重用原则</li>
+</ol>
+</blockquote>
+<p>包的所有类被一起重用。如果你重用了其中的一个类，就重用全部。换成另一个比较浅显易懂的说法：没有被一起重用的类不应该被组合在一起。CRP原则帮助我们决定哪些类应该被放到同一个包里。包的内部关系方面（聚合性）的原则</p>
+<p>依赖一个包就是依赖这个包所包含的一切。当一个包发生了改变，并发布新的版本，使用这个包的所有用户都必须在新的包环境下验证他们的工作，即使被他们使用的部分没有发生任何改变。<br>因为如果包中包含有未被使用的类，即使用户不关心该类是否改变，但用户还是不得不升级该包并对原来的功能加以重新测试。</p>
+<p>“不能强迫用户去依赖那些他们不使用的接口”，把这个概念应用到更广范围的包上，就是CRP的基本理念：不要把用户不使用的类一起组合进包里。</p>
+<p>CRP与REP一样，都是从方便用户重用的角度去设计包，重用者是他们的受益者，CCP则让系统的维护者受益。CCP让包尽可能大（CCP原则加入功能相关的类），CRP则让包尽可能小（CRP原则剔除不使用的类）。它们的出发点不一样，但不相互冲突。CRP保证了包的内部具有很高的聚合性。</p>
+<p>全部重用原则（CRP）从用户的角度上为我们规范了包设计的一个原则：在设计包时，相互之间没有紧密关联的类不应该放在同一包里。</p>
+<blockquote>
+<ol>
+<li>Least Knowledge Principle (LKP) -迪米特法则</li>
+</ol>
+</blockquote>
+<p>迪米特法则（Law of Demeter，LoD）也称为最少知识原则（Least Knowledge Principle，LKP）。<br>一个对象应该对其他对象有最少的了解。通俗地讲，一个类应该对自己需要耦合或调用的类知道得最少，你（被耦合或调用的类）的内部是如何复杂都和我没关系，那是你的事情，我就知道你提供的public方法，我就调用这么多，其他的一概不关心。</p>
+<p>含义：<br>只和朋友交流<br>朋友类的定义是这样的：出现在成员变量、方法的输入输出参数中的类称为成员朋友类，而出现在方法体内部的类不属于朋友类。下面的代码在方法体内部依赖了其他类，这严重违反迪米特法则</p>
+<pre><code>public class Teacher {
+    public void commond(GroupLeader groupLeader) {
+        List&lt;Girl&gt; listGirls = new ArrayList&lt;Girl&gt;();
+        for (int i = 0; i &lt; 20; i++) {
+            listGirls.add(new Girl());
+        }
+        groupLeader.countGirls(listGirls);
+    }
+}
+</code></pre><p>方法是类的一个行为，类竟然不知道自己的行为与其他类产生了依赖关系，这是不允许的。<br>正确的做法是：</p>
+<pre><code>public class Teacher {
+    public void commond(GroupLeader groupLeader) {
+        groupLeader.countGirls();
+    }
+}
+public class GroupLeader {
+    private List&lt;Girl&gt; listGirls;
+    public GroupLeader(List&lt;Girl&gt; _listGirls) {
+        this.listGirls = _listGirls;
+    }
+    public void countGirls() {
+        System.out.println(&quot;女生数量是：&quot; + listGirls.size());
+    }
+}
+</code></pre><p>注意：一个类只和朋友交流，不与陌生类交流，不要出现getA().getB().getC().getD()这种情况（在一种极端情况下允许出现这种访问，即每一个点号后面的返回类型都相同），类与类之间的关系是建立在类间的，而不是方法间，因此一个方法尽量不引入一个类中不存在的对象，当然，JDK API提供的类除外。<br>朋友间也是有距离的<br>一个类公开的public属性或方法越多，修改时涉及的面也就越大，变更引起的风险扩散也就越大。因此，为了保持朋友类间的距离，在设计时需要反复衡量：是否还可以再减少public方法和属性，是否可以修改为private、package-private（包类型，在类、方法、变量前不加访问权限，则默认为包类型）、protected等访问权限，是否可以加上final关键字等。<br>注意：迪米特法则要求类“羞涩”一点，尽量不要对外公布太多的public方法和非静态的public变量，尽量内敛，多使用private、package-private、protected等访问权限。</p>
+<p>是自己的就是自己的<br>如果一个方法放在本类中，既不增加类间关系，也对本类不产生负面影响，就放置在本类中。</p>
+<p>谨慎使用Serializable</p>
+<p>最后，迪米特法则的核心观念就是类间解耦，弱耦合，只有弱耦合了以后，类的复用率才可以提高。</p>
+<blockquote>
+<p>  Principle –纵览</p>
+</blockquote>
+<pre><code>----类原则 ----
+</code></pre><p>1.单一职责原则 -Single Responsibility Principle(SRP)<br>就一个类而言，应该仅有一个引起它变化的原因。<br>(职责即为“变化的原因”。)<br>2.开放-封闭原则 - OpenClose Principle(OCP)<br>软件实体（类、模块、函数等）应该是可以扩展的，但是不可修改。<br>(对于扩展是开放的,对于更改是封闭的.<br>关键是抽象.将一个功能的通用部分和实现细节部分清晰的分离开来.<br>开发人员应该仅仅对程序中呈现出频繁变化的那些部分作出抽象.<br>拒绝不成熟的抽象和抽象本身一样重要. )<br>3.里氏替换原则 -Liskov Substitution Principle(LSP)<br>子类型(subclass)必须能够替换掉它们的基类型(superclass)。<br>4.依赖倒置原则(IoCP) 或 依赖注入原则 -Dependence Inversion Principle(DIP)<br>抽象不应该依赖于细节。细节应该依赖于抽象。<br>(Hollywood原则: “Don’t call us, we’ll call you”.<br>程序中所有的依赖关系都应该终止于抽象类和接口。<br>针对接口而非实现编程。<br>任何变量都不应该持有一个指向具体类的指针或引用。<br>任何类都不应该从具体类派生。<br>任何方法都不应该覆写他的任何基类中的已经实现了的方法。)<br>5.接口隔离原则(ISP)<br>不应该强迫客户依赖于它们不用的方法。<br>接口属于客户，不属于它所在的类层次结构。<br>(多个面向特定用户的接口胜于一个通用接口。)</p>
+<blockquote>
+<p>—-包内聚原则 —-</p>
+</blockquote>
+<p>6.重用发布等价原则(REP)<br>重用的粒度就是发布的粒度。<br>7.共同封闭原则(CCP)<br>包中的所有类对于同一类性质的变化应该是共同封闭的。<br>一个变化若对一个包产生影响，<br>则将对该包中的所有类产生影响，<br>而对于其他的包不造成任何影响。<br>8.共同重用原则(CRP)<br>一个包中的所有类应该是共同重用的。<br>如果重用了包中的一个类，<br>那么就要重用包中的所有类。<br>(相互之间没有紧密联系的类不应该在同一个包中。)<br>—-包耦合原则<br>9.无环依赖原则(ADP)<br>在包的依赖关系图中不允许存在环。<br>10.稳定依赖原则(SDP)<br>朝着稳定的方向进行依赖。<br>应该把封装系统高层设计的软件（比如抽象类）放进稳定的包中，<br>不稳定的包中应该只包含那些很可能会改变的软件（比如具体类）。<br>11.稳定抽象原则(SAP)<br>包的抽象程度应该和其稳定程度一致。<br>(一个稳定的包应该也是抽象的，一个不稳定的包应该是抽象的. )</p>
+<blockquote>
+<p>—-其它扩展原则—-</p>
+</blockquote>
+<p>12.BBP(Black Box Principle)黑盒原则<br>多用类的聚合，少用类的继承。<br>13.DAP(Default Abstraction Principle)缺省抽象原则<br>在接口和实现接口的类之间引入一个抽象类,这个类实现了接口的大部分操作.<br>14.IDP(Interface Design Principle)接口设计原则<br>规划一个接口而不是实现一个接口。<br>15.DCSP(Don’t Concrete Supperclass Principle)不要构造具体的超类原则<br>避免维护具体的超类。<br>16.迪米特法则<br>一个类只依赖其触手可得的类。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+            
+    
+        <a href="http://b.nearby.ren/2015/06/12/Java面向对象16种设计原则/#comments" class="article-comment-link">评论</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2015/08/08/设计模式/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    设计模式
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2015/06/09/resume2/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">resume2</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    <section id="comments">
+    
+        
+    <div id="uyan_frame"></div>
+
+    
+    </section>
+
+</section>
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/10/06/sync.WaitGroup使用说明的副本/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/go/">go</a></p>
+                            <p class="item-title"><a href="/2018/10/06/sync.WaitGroup使用说明的副本/" class="title">Go语言中 new()和make()的区别详解</a></p>
+                            <p class="item-date"><time datetime="2018-10-06T10:30:12.000Z" itemprop="datePublished">2018-10-06</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/10/05/sync.WaitGroup使用说明/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/go/">go</a></p>
+                            <p class="item-title"><a href="/2018/10/05/sync.WaitGroup使用说明/" class="title">Go sync包 WaitGroup使用</a></p>
+                            <p class="item-date"><time datetime="2018-10-05T08:30:12.000Z" itemprop="datePublished">2018-10-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/09/08/android studio升级之后很多jar无法下载 解决/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/android-studio/">android studio</a></p>
+                            <p class="item-title"><a href="/2018/09/08/android studio升级之后很多jar无法下载 解决/" class="title">android studio升级之后很多jar无法下载 解决</a></p>
+                            <p class="item-date"><time datetime="2018-09-08T08:03:12.000Z" itemprop="datePublished">2018-09-08</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/09/05/mac android studio 无线调试/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/android/">android</a></p>
+                            <p class="item-title"><a href="/2018/09/05/mac android studio 无线调试/" class="title">mac android studio 无线调试</a></p>
+                            <p class="item-date"><time datetime="2018-09-05T08:30:12.000Z" itemprop="datePublished">2018-09-05</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2018/03/05/Flutter Widget 之旅/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/flutter/">flutter</a></p>
+                            <p class="item-title"><a href="/2018/03/05/Flutter Widget 之旅/" class="title">Flutter Widget 之旅</a></p>
+                            <p class="item-date"><time datetime="2018-03-05T08:30:12.000Z" itemprop="datePublished">2018-03-05</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/android/">android</a><span class="category-list-count">23</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/android-studio/">android studio</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/apk/">apk</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/dagger2/">dagger2</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/flutter/">flutter</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/git/">git</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/go/">go</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/gradle/">gradle</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/hexo/">hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/markdown/">markdown</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/mvp/">mvp</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/resume/">resume</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/rxjava/">rxjava</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring/">spring</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tinker/">tinker</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/vuforia/">vuforia</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/web/">web</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/文字/">文字</a><span class="category-list-count">7</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">10</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">六月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">四月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/03/">三月 2016</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">十一月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">六月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">一月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">十月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/09/">九月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">30</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bug/">bug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dagger2/">dagger2</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/glide/">glide</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/">go</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gradle/">gradle</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/h5/">h5</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ios/">ios</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mac/">mac</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mvp/">mvp</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/resume/">resume</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rxandroid/">rxandroid</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rxjava/">rxjava</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/service/">service</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/springboot/">springboot</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/view/">view</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vuforia/">vuforia</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文字/">文字</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/歌曲/">歌曲</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/直播/">直播</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔录/">笔录</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a><span class="tag-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/android/" style="font-size: 20px;">android</a> <a href="/tags/bug/" style="font-size: 10px;">bug</a> <a href="/tags/dagger2/" style="font-size: 12.5px;">dagger2</a> <a href="/tags/git/" style="font-size: 17.5px;">git</a> <a href="/tags/glide/" style="font-size: 15px;">glide</a> <a href="/tags/go/" style="font-size: 12.5px;">go</a> <a href="/tags/gradle/" style="font-size: 12.5px;">gradle</a> <a href="/tags/h5/" style="font-size: 10px;">h5</a> <a href="/tags/hexo/" style="font-size: 12.5px;">hexo</a> <a href="/tags/https/" style="font-size: 12.5px;">https</a> <a href="/tags/ios/" style="font-size: 12.5px;">ios</a> <a href="/tags/java/" style="font-size: 12.5px;">java</a> <a href="/tags/mac/" style="font-size: 12.5px;">mac</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mvp/" style="font-size: 15px;">mvp</a> <a href="/tags/resume/" style="font-size: 15px;">resume</a> <a href="/tags/rxandroid/" style="font-size: 12.5px;">rxandroid</a> <a href="/tags/rxjava/" style="font-size: 12.5px;">rxjava</a> <a href="/tags/service/" style="font-size: 10px;">service</a> <a href="/tags/springboot/" style="font-size: 10px;">springboot</a> <a href="/tags/view/" style="font-size: 12.5px;">view</a> <a href="/tags/vuforia/" style="font-size: 10px;">vuforia</a> <a href="/tags/web/" style="font-size: 15px;">web</a> <a href="/tags/文字/" style="font-size: 12.5px;">文字</a> <a href="/tags/歌曲/" style="font-size: 12.5px;">歌曲</a> <a href="/tags/直播/" style="font-size: 10px;">直播</a> <a href="/tags/笔录/" style="font-size: 15px;">笔录</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/设计模式/" style="font-size: 15px;">设计模式</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2019 阿荣<br>
+            <!-- <a href="http://github.com/ppoffice">ppoffice</a>     
+            主题 - <a href="http://hexo.io/" target="_blank">Hexo</a> -->  
+             <a href="#" target="_blank">人生如逆旅  &phi; 我亦是行人 </a>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2119666"></script>
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
