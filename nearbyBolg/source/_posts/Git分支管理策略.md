@@ -5,8 +5,7 @@ categories: git
 tags: [git]
 ---
 
-Git分支管理策略
-
+Git分支管理策略 https://learngitbranching.js.org/?demo
 1.主要分支：master
 
 	说明：代码库应该有一个、且仅有一个主分支。所有提供给用户使用的正式版本，都在这个主分支开发。
