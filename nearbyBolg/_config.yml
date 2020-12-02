@@ -5,7 +5,7 @@
 # Site
 title: nearby.ren    #博客名
 subtitle:   #副标题
-description:  nearby , 移动开发, 用户体验, 设计, Java, JavaWeb #用于搜索，没有直观表现
+description:  nearby, 移动开发, 用户体验, 设计, Java, JavaWeb, Go #用于搜索，没有直观表现
 author: 阿荣   #作者
 language:  zh-CN #语言
 timezone:     #时区，此处不填写，hexo会以你目前电脑的时区为默认值
