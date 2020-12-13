@@ -5,7 +5,7 @@ categories: linxu
 tags: [linxu]
 ---
 
-#安装之前检查下是否已经安装VNC安装之前检查下是否已经安装VNC
+### 安装之前检查下是否已经安装VNC安装之前检查下是否已经安装VNC
 ```
 [root@nearby ~]# rpm -q tigervnc tigervnc-server 
 未安装软件包 tigervnc 
@@ -89,7 +89,7 @@ Log file is /root/.vnc/nearby.jump:2.log
 ```
 
 
-#安Centos 7 安装GNOME桌面环境
+### 安Centos 7 安装GNOME桌面环境
 
 
 第1步：安装GNOME及相应桌面管理工具
