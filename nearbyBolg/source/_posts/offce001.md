@@ -1,6 +1,6 @@
 ---
-title: Centos 7 安装GNOME桌面环境与安装 VNC 使用图形界面远程
-date: 2020-02-23 15:10:55
+title: offce 001
+date: 2015-12-14 12:10:55
 categories: linxu
 tags: [linxu]
 ---
