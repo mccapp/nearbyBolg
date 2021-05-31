@@ -1,8 +1,8 @@
 ---
 title: offce 001
-date: 2015-12-14 12:10:55
-categories: linxu
-tags: [linxu]
+date: 2015-12-14 12:12:55
+categories: offce
+tags: [offce]
 ---
 View的绘制流程、Activity、Window、View的关系
 Activity启动时创建Window、ViewRoot并建立关联，流程如下：
