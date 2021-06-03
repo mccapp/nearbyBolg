@@ -19,7 +19,7 @@ MVP是模型(Model)、视图(View)、主持人(Presenter)的缩写,分别代表�
 这样分层的好处就是大大减少了Model与View层之间的耦合度。一方面可以使得View层和Model层单独开发与测试，互不依赖。另一方面Model层可以封装复用，可以极大的减少代码量。当然，Mvp还有其他的一些优点。
 
   [1]: http://images2015.cnblogs.com/blog/420264/201512/420264-20151223222959015-298327306.png
-  
+```  
   1.View层
     View层首页数据展示模块的组件是Activity，里面有一个RecycleView 布局如下：  
 
@@ -34,13 +34,14 @@ MVP是模型(Model)、视图(View)、主持人(Presenter)的缩写,分别代表�
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:paddingTop="@dimen/card_margin">
         </android.support.v7.widget.RecyclerView>
-
+```
 首页列表模块主要展示从网络获取的首页列表信息，view层的接口大概需要如下方法：
 (1)请求数据的过程中需要提示‘正在加载’的反馈信息给用户
 (2)加载数据成功后，将加载得到的数据填充到RecycleView展示给用户
 (3)加载数据成功后，将提示‘正在加载’反馈信息取消掉
 (4)若加载数据失败，如网络连接、则需要给用户提示信息。 
 
+```
 	//业务接口
     public interface HomeContract {
         interface View {
@@ -69,10 +70,11 @@ MVP是模型(Model)、视图(View)、主持人(Presenter)的缩写,分别代表�
                     view.ToastMessage();
             }
     }
-
+```
 首页列表Activity中实现上述接口：
 
-    public class HomeActivity extends AppCompatActivity implements HomeContract.view {
+```
+public class HomeActivity extends AppCompatActivity implements HomeContract.view {
       HomeContract.Action action;
         @Override
         public void onLoading(){
@@ -97,6 +99,6 @@ MVP是模型(Model)、视图(View)、主持人(Presenter)的缩写,分别代表�
             action.requestHome(xx);
         }
     }
-    
-    当用户打开首页界面时，就请求网络获取数据，初始化Presenter引用实例，调用Presenter层的requestHome接口，业务处理完毕后，调用相应的onLoading()、onError()、updateUI()、ToastMessage()方法处理不同逻辑。
+```
+当用户打开首页界面时，就请求网络获取数据，初始化Presenter引用实例，调用Presenter层的requestHome接口，业务处理完毕后，调用相应的onLoading()、onError()、updateUI()、ToastMessage()方法处理不同逻辑。
     

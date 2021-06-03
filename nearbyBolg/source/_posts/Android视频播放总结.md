@@ -65,17 +65,22 @@ ExoPlayer 的缺点：
 Vitamio的使用步骤：  
  1. 下载Vitamio库，并作为工程依赖。
  2. 在Activity的onCreate方法中添加如下代码，初始化Vitamio的解码器
-
+```
     @Override public void onCreate(Bundle icicle){
         super.onCreate(icicle)
         if(!LibsChecker.checkVitamioLibs(this))
         return ;
     }
+```
+
 3. 在AndroidMainfest.xml中声明InitActivity
 
-    <activity android:name="io.vov.vitamio.activity.InitActivity" android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden"
+```
+<activity android:name="io.vov.vitamio.activity.InitActivity" android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden"
     android:launchMode="singleTop" android:theme="@android:style/Theme.NoTitleBar"
     android:windowSoftInputMode="stateAlwaysHidden"/> 
+
+```
 4. 其余步骤和使用 Android 原生的 VideoView 是一样的。
 
 **优点**
@@ -106,16 +111,19 @@ Vitamio的使用步骤：
  
 配置 NDK
 
-    # add these lines to your ~/.bash_profile or ~/.profile
-    # export ANDROID_SDK=<your sdk path>
-    # export ANDROID_NDK=<your ndk path>
-    
+```
+# add these lines to your ~/.bash_profile or ~/.profile
+# export ANDROID_SDK=<your sdk path>
+# export ANDROID_NDK=<your ndk path>
+
 clone 项目
 
-    git clone https://github.com/Bilibili/ijkplayer.git ijkplayer-android
-    
+git clone https://github.com/Bilibili/ijkplayer.git ijkplayer-android
+```
+
 编译 ffmpeg    
 
+```
     cd ijkplayer-android 
     ./init-android.sh 
     cd config
@@ -124,11 +132,14 @@ clone 项目
     cd android/contrib
     ./compile-ffmpeg.sh clean
     ./compile-ffmpeg.sh all
-    
+```
+
 ffmpeg 编译通过后，编译 ijkplayer 
 
-    cd ..
-    ./compile-ijk.sh all
+```
+cd ..
+./compile-ijk.sh all
+```  
 编译通过后在 android 目录下有 ijkplayer 文件夹，这个是 ijkplayer 的 demo。导入 Android Studio 即可。ijkplayer 的 demo 中提供了 IjkVideoView 类，它封装了 Android 原生的 MediaPlayer 、ExoPlayer 和 IjkMediaPlayer。可根据需要选择。
 
 **优缺点**

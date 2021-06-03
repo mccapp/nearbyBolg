@@ -9,7 +9,7 @@ tags: [android,dagger2,mvp]
     
 dagger2使用教程：
     根目录的build文件加入android-apt支持
-
+```
     环境配置：
     buildscript{
         repositories{
@@ -49,7 +49,7 @@ dagger2使用教程：
        android:label="@string/app_name"
        android:label="@string/app_name"
        />
-
+```
      
      
 
